@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spam The Meats — Industrial Meat Packaging Clicker Game</title>
+  <meta
+    name="description"
+    content="Package processed meats on the factory floor, unlock artisanal butcher recipes from Spam to A5 Wagyu, and upgrade meat quality grades for unlimited profits."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="factory-shell">
+    <!-- ====================================================================
+         TOP FACTORY TELEMETRY BAR
+         ==================================================================== -->
+    <header class="telemetry-bar" role="banner">
+      <div class="brand-plate">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 6H5V5h14v4zm-2 4H7c-1.66 0-3 1.34-3 3v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3c0-1.66-1.34-3-3-3zm-5 5.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h1>Spam The Meats</h1>
+          <p class="brand-subtitle">Amalgamated Meatworks Co. • Packaging Division</p>
+        </div>
+      </div>
+
+      <div class="telemetry-readouts" aria-label="Factory Financial Telemetry">
+        <div class="telemetry-module treasury-module">
+          <span class="telemetry-label">Factory Treasury</span>
+          <div class="telemetry-value" id="cash-balance">$0</div>
+        </div>
+
+        <div class="telemetry-module">
+          <span class="telemetry-label">Revenue / Click</span>
+          <div class="telemetry-value" id="yield-per-click">$1</div>
+        </div>
+
+        <div class="telemetry-module">
+          <span class="telemetry-label">Packages Sold</span>
+          <div class="telemetry-value" id="total-packages">0</div>
+        </div>
+
+        <div class="telemetry-module">
+          <span class="telemetry-label">Press Cycles</span>
+          <div class="telemetry-value" id="total-clicks">0</div>
+        </div>
+      </div>
+
+      <div class="telemetry-controls">
+        <button
+          type="button"
+          class="utility-btn"
+          id="btn-toggle-sound"
+          aria-pressed="true"
+          title="Toggle mechanical & cash register sound effects"
+        >
+          <span id="sound-icon-label">SFX: ON</span>
+        </button>
+        <button
+          type="button"
+          class="utility-btn"
+          id="btn-open-blueprint"
+          title="View meat pricing blueprint, formulas, and factory controls"
+        >
+          <span>Specs &amp; Rules</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         MAIN WORKSPACE
+         ==================================================================== -->
+    <main class="factory-workspace">
+      <!-- LEFT COLUMN: HYDRAULIC PACKAGING PRESS & CONVEYOR -->
+      <section class="packaging-station" aria-labelledby="station-heading">
+        <div class="station-header">
+          <div class="station-title-group">
+            <span class="status-led" aria-hidden="true"></span>
+            <h2 class="station-title" id="station-heading">Hydraulic Packaging Press</h2>
+          </div>
+          <span class="station-badge" id="batch-size-badge">1 Pkg / Click</span>
+        </div>
+
+        <div class="press-housing" id="press-housing">
+          <div class="hazard-trim" aria-hidden="true"></div>
+          <div class="floating-popups-layer" id="floating-popups" aria-hidden="true"></div>
+
+          <div class="press-collar">
+            <button
+              type="button"
+              class="package-press-btn"
+              id="btn-package-press"
+              aria-label="Package Meats and Sell Batch"
+            >
+              <svg class="press-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 2H6c-1.1 0-2 .9-2 2v3c0 1.1.9 2 2 2h1v3H5c-1.1 0-2 .9-2 2v6h18v-6c0-1.1-.9-2-2-2h-2V9h1c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 7V4h12v3H6zm9 5H9V9h6v3zm4 6H5v-4h14v4z"/>
+              </svg>
+              <span class="press-main-label">Package<br />Meats</span>
+              <span class="press-yield-pill" id="press-yield-badge">+$1 / click</span>
+            </button>
+          </div>
+
+          <p class="press-subhint">
+            Click press or hit <strong>[SPACE]</strong> to package &amp; ship 1 of every unlocked meat
+          </p>
+          <div class="hazard-trim" style="margin-top: 12px;" aria-hidden="true"></div>
+        </div>
+
+        <!-- LIVE CONVEYOR DISPATCH BELT -->
+        <div class="conveyor-section" aria-label="Automated Packaging Conveyor">
+          <div class="conveyor-header">
+            <span>Conveyor Line #01 • Auto-Dispatch</span>
+            <span id="last-sale-readout">Ready to stamp</span>
+          </div>
+          <div class="conveyor-viewport">
+            <div class="conveyor-chute-left"></div>
+            <div class="conveyor-packages-stage" id="conveyor-stage"></div>
+            <div class="conveyor-track" id="conveyor-track"></div>
+            <div class="conveyor-chute-right">
+              <span class="chute-tag">SOLD</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVE BATCH MANIFEST -->
+        <div class="batch-manifest">
+          <div class="manifest-title-row">
+            <span>Active Batch Manifest (Per Click)</span>
+            <span id="manifest-total-label">$1 Total</span>
+          </div>
+          <div class="manifest-pills" id="batch-manifest-list"></div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: MEAT RECIPES & QUALITY UPGRADE DECK -->
+      <section class="production-deck" aria-labelledby="deck-heading">
+        <div class="deck-header">
+          <div class="deck-title-group">
+            <h2 id="deck-heading">Meat Processing Lines &amp; Quality Grades</h2>
+            <p class="deck-subtitle">
+              Unlock recipes to expand your batch per click. Upgrade meat quality for unlimited price scaling.
+            </p>
+          </div>
+          <div class="deck-summary-pills">
+            <div class="summary-pill">
+              Recipes Unlocked: <strong id="unlocked-count">1 / 6</strong>
+            </div>
+            <div class="summary-pill">
+              Quality Upgrades: <strong id="total-levels">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="meat-lines-grid" id="meat-lines-grid">
+          <!-- Populated dynamically by game.js -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       FACTORY BLUEPRINT & SPECIFICATIONS MODAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="blueprint-modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title">Amalgamated Meatworks • Pricing &amp; Upgrade Specifications</h3>
+        <button type="button" class="utility-btn" id="btn-close-blueprint">Close [ESC]</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">
+        Every click of the hydraulic press packages and sells <strong>1 unit of each unlocked meat</strong>.
+        Quality upgrade levels are unlimited.
+      </p>
+
+      <div style="overflow-x: auto;">
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Processed Meat</th>
+              <th>Recipe Unlock</th>
+              <th>Base Sale Price</th>
+              <th>Level-Up Bonus</th>
+              <th>Base Upgrade Cost</th>
+              <th>Additional Upgrades</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Spam</strong></td>
+              <td>Starter (Unlocked)</td>
+              <td>$1</td>
+              <td>+$5 / lvl</td>
+              <td>$100</td>
+              <td>100 clicks at current price</td>
+            </tr>
+            <tr>
+              <td><strong>2. Hotdogs</strong></td>
+              <td>$1,000 Recipe</td>
+              <td>$10</td>
+              <td>+$20 / lvl</td>
+              <td>$10,000</td>
+              <td>100 clicks at current price</td>
+            </tr>
+            <tr>
+              <td><strong>3. Sausage</strong></td>
+              <td>$10,000 Recipe</td>
+              <td>$100</td>
+              <td>+$300 / lvl</td>
+              <td>$100,000</td>
+              <td>100 clicks at current price</td>
+            </tr>
+            <tr>
+              <td><strong>4. Salami</strong></td>
+              <td>$100,000 Recipe</td>
+              <td>$1,000</td>
+              <td>+$4,000 / lvl</td>
+              <td>$1,000,000</td>
+              <td>1,000 clicks at current price</td>
+            </tr>
+            <tr>
+              <td><strong>5. Ground Beef</strong></td>
+              <td>$1,000,000 Recipe</td>
+              <td>$10,000</td>
+              <td>+$50,000 / lvl</td>
+              <td>$10,000,000</td>
+              <td>1,000 clicks at current price</td>
+            </tr>
+            <tr>
+              <td><strong>6. Wagyu</strong></td>
+              <td>$100,000,000 Recipe</td>
+              <td>$1,000,000</td>
+              <td>+$10,000,000 / lvl</td>
+              <td>$10,000,000,000</td>
+              <td>10,000 clicks at current price</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--bg-inset); padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid #2D2722;">
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; color: var(--text-primary);">
+            Additional Upgrade Cost Mode
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-secondary);">
+            Choose how "equivalent of N clicks at the current price" applies after the first upgrade:
+          </div>
+        </div>
+        <select
+          id="select-cost-mode"
+          class="utility-btn"
+          style="background: #231F1C; color: var(--text-primary); padding: 8px 10px;"
+        >
+          <option value="direct">Direct Equivalent (Lvl 1 = Base Cost; Lvl 2+ = N × Current Meat Price)</option>
+          <option value="additive">Additive on Base (Base Cost + N × Current Meat Price)</option>
+          <option value="cumulative">Cumulative Step (Previous Cost + N × Current Meat Price)</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+          Progress auto-saves locally in your browser.
+        </span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="utility-btn danger-btn" id="btn-reset-factory">
+            Reset Factory Progress
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
