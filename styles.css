@@ -56,6 +56,9 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+  --sidebar-width: 372px;
+  --rail-width: 92px;
+  --workspace-gap: 12px;
 }
 
 *,
@@ -105,13 +108,12 @@ body::before {
 .factory-shell {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 690px;
   display: flex;
   flex-direction: column;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 14px 20px 20px;
-  gap: 16px;
+  padding: 10px 14px 12px;
+  gap: 10px;
 }
 
 .telemetry-bar {
@@ -123,7 +125,7 @@ body::before {
   border: 1px solid var(--border-chassis);
   border-top-color: rgba(255, 248, 235, 0.14);
   border-radius: var(--radius-md);
-  padding: 12px 20px;
+  padding: 8px 16px;
   box-shadow:
     0 10px 24px -8px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -177,23 +179,23 @@ body::before {
 .telemetry-readouts {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
 }
 
 .telemetry-module {
   background: var(--bg-inset);
   border: 1px solid #2E2823;
   border-radius: var(--radius-sm);
-  padding: 8px 16px;
-  min-width: 175px;
+  padding: 5px 12px;
+  min-width: 140px;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.75);
   position: relative;
 }
 
 .telemetry-module.treasury-module {
   border-color: rgba(245, 158, 11, 0.45);
-  min-width: 230px;
+  min-width: 190px;
 }
 
 .telemetry-label {
@@ -235,6 +237,7 @@ body::before {
 }
 
 .utility-btn {
+  white-space: nowrap;
   appearance: none;
   background: #27221E;
   color: var(--text-secondary);
@@ -270,52 +273,62 @@ body::before {
   color: var(--brass-gold-hi);
 }
 
-/* ==========================================================================
-   MAIN TWO-COLUMN WORKSPACE
-   ========================================================================== */
-
-.factory-workspace {
-  display: grid;
-  grid-template-columns: minmax(360px, 430px) 1fr;
-  gap: 18px;
-  flex: 1;
-  align-items: stretch;
+.utility-btn[aria-expanded="true"] {
+  border-color: var(--brass-gold);
+  color: var(--brass-gold-hi);
 }
 
 /* ==========================================================================
-   LEFT COLUMN: HYDRAULIC PACKAGING PRESS & CONVEYOR STAGE
+   MAIN WORKSPACE: FACTORY FLOOR & SIDEBAR
    ========================================================================== */
 
-.packaging-station {
+.factory-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: var(--workspace-gap);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   FACTORY FLOOR: OPERATOR STATION & BELT HALL
+   ========================================================================== */
+
+.factory-floor {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   background: linear-gradient(180deg, #211D1A 0%, #171412 100%);
   border: 1px solid var(--border-chassis);
   border-top-color: rgba(255, 248, 235, 0.1);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 18px;
   box-shadow:
     0 16px 32px -12px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  position: relative;
   overflow: hidden;
 }
 
-/* Corner industrial rivets */
+.operator-station {
+  position: relative;
+  flex: 0 0 256px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .station-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #2D2722;
-  padding-bottom: 12px;
+  gap: 8px;
+  padding: 12px 14px 8px;
 }
 
 .station-title-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .status-led {
@@ -328,90 +341,193 @@ body::before {
 
 .station-title {
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .station-badge {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   color: var(--brass-gold-hi);
   background: var(--brass-gold-dim);
   border: 1px solid rgba(245, 158, 11, 0.35);
-  padding: 3px 9px;
+  padding: 2px 6px;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
-/* Hydraulic Press Well */
-.press-housing {
-  position: relative;
+/* Worker & Lever Illustration */
+.worker-scene {
+  overflow: visible;
+  display: block;
+  flex: 1 1 280px;
+  width: 100%;
+  min-height: 170px;
+  max-height: 320px;
+}
+
+.worker-arm {
+  fill: none;
+  stroke: #3B6EA5;
+  stroke-width: 15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.worker-arm-far {
+  stroke: #2A5180;
+}
+
+.worker-glove {
+  fill: var(--brass-gold);
+}
+
+.worker-glove-far {
+  fill: #B4740A;
+}
+
+.worker-leg {
+  fill: none;
+  stroke: #2A5180;
+  stroke-width: 19;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.worker-leg-back {
+  stroke: #1F3E63;
+}
+
+.worker-boot {
+  fill: #3A2C20;
+}
+
+.worker-boot-back {
+  fill: #2A1F16;
+}
+
+.worker-torso {
+  fill: #3B6EA5;
+}
+
+.worker-apron {
+  fill: #F3EDE3;
+}
+
+.worker-apron-strap {
+  fill: none;
+  stroke: #F3EDE3;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.worker-apron-stain {
+  fill: #B91C1C;
+  opacity: 0.7;
+}
+
+.worker-skin {
+  fill: #C98F63;
+}
+
+.worker-eye {
+  fill: #2B2118;
+}
+
+.worker-mouth {
+  fill: none;
+  stroke: #2B2118;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.worker-hat {
+  fill: var(--brass-gold-hi);
+}
+
+.lever-shaft {
+  fill: #A8A29E;
+}
+
+.lever-grip {
+  fill: var(--press-red);
+}
+
+.console-pipe {
+  fill: none;
+  stroke: #4A4037;
+  stroke-width: 12;
+}
+
+.console-body {
+  fill: #38312B;
+  stroke: #52473E;
+  stroke-width: 2;
+}
+
+.console-pivot {
+  fill: #78716C;
+  stroke: #1C1917;
+  stroke-width: 3;
+}
+
+.console-led {
+  fill: #5F1313;
+}
+
+.console-led.is-lit {
+  fill: var(--press-red-hi);
+}
+
+.catwalk {
+  fill: #443B34;
+}
+
+/* Press Button Well */
+.press-well {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 22px 16px;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.14) 0%, transparent 70%),
-    var(--bg-inset);
-  border: 2px solid #2F2924;
-  border-radius: var(--radius-md);
-  box-shadow:
-    inset 0 6px 18px rgba(0, 0, 0, 0.85),
-    0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-/* Warning stripes bar top & bottom inside press housing */
-.hazard-trim {
-  width: 100%;
-  height: 8px;
-  border-radius: 3px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #F59E0B,
-    #F59E0B 10px,
-    #1C1917 10px,
-    #1C1917 20px
-  );
-  opacity: 0.75;
+  gap: 6px;
+  padding: 12px 12px 10px;
+  background: radial-gradient(circle at 50% 40%, rgba(220, 38, 38, 0.12) 0%, transparent 70%);
 }
 
 .press-collar {
-  margin: 20px 0 16px;
-  padding: 14px;
+  padding: 8px;
   border-radius: 50%;
   background: linear-gradient(145deg, #352E28, #1A1614);
   border: 3px solid #4A4037;
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.8),
     inset 0 3px 6px rgba(255, 255, 255, 0.12);
-  position: relative;
 }
 
 .package-press-btn {
   appearance: none;
-  width: 220px;
-  height: 220px;
+  width: 136px;
+  height: 136px;
   border-radius: 50%;
-  border: 4px solid #FCA5A5;
+  border: 3px solid #FCA5A5;
   background: radial-gradient(circle at 38% 30%, #EF4444 0%, #DC2626 52%, #991B1B 100%);
   color: #FFFBEB;
   cursor: pointer;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 18px;
+  padding: 10px;
   text-align: center;
   box-shadow:
-    0 12px 0 #651212,
-    0 18px 28px rgba(0, 0, 0, 0.85),
-    inset 0 4px 10px rgba(255, 255, 255, 0.35),
-    inset 0 -6px 12px rgba(69, 10, 10, 0.7);
+    0 7px 0 #651212,
+    0 12px 20px rgba(0, 0, 0, 0.85),
+    inset 0 3px 8px rgba(255, 255, 255, 0.35),
+    inset 0 -5px 10px rgba(69, 10, 10, 0.7);
   transition:
     transform 0.06s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.06s ease,
@@ -425,31 +541,24 @@ body::before {
 
 .package-press-btn:focus-visible {
   box-shadow:
-    0 12px 0 #651212,
+    0 7px 0 #651212,
     0 0 0 4px var(--brass-gold-hi),
-    0 18px 28px rgba(0, 0, 0, 0.85);
+    0 12px 20px rgba(0, 0, 0, 0.85);
 }
 
 .package-press-btn:active,
 .package-press-btn.is-pressed {
-  transform: translateY(9px) scale(0.985);
+  transform: translateY(5px) scale(0.985);
   box-shadow:
-    0 3px 0 #651212,
-    0 6px 12px rgba(0, 0, 0, 0.8),
+    0 2px 0 #651212,
+    0 4px 10px rgba(0, 0, 0, 0.8),
     inset 0 3px 8px rgba(255, 255, 255, 0.25),
     inset 0 -3px 8px rgba(69, 10, 10, 0.8);
 }
 
-.press-icon {
-  width: 46px;
-  height: 46px;
-  fill: currentColor;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
-}
-
 .press-main-label {
   font-family: var(--font-display);
-  font-size: 1.32rem;
+  font-size: 1.08rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -458,24 +567,33 @@ body::before {
 }
 
 .press-yield-pill {
-  margin-top: 4px;
+  max-width: 100%;
   background: rgba(15, 13, 12, 0.72);
   border: 1px solid rgba(254, 243, 199, 0.35);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 2px 8px;
   font-family: var(--font-mono);
-  font-size: 0.86rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--brass-gold-hi);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .press-subhint {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 8px;
   text-align: center;
+}
+
+.press-readout {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--brass-gold-hi);
+  text-align: center;
+  min-height: 1.45em;
 }
 
 /* Floating Revenue Popups Layer */
@@ -491,7 +609,7 @@ body::before {
   position: absolute;
   font-family: var(--font-mono);
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 0.92rem;
   color: var(--brass-gold-hi);
   text-shadow:
     0 2px 6px rgba(0, 0, 0, 0.9),
@@ -517,63 +635,210 @@ body::before {
 }
 
 /* ==========================================================================
-   ANIMATED CONVEYOR BELT & PACKAGE DISPATCH
+   BELT HALL: PACKING MACHINE, CONVEYOR BELTS & SHIPPING WALL
+   Layer order: wall < hole back < track < packages < hole front < machine
    ========================================================================== */
 
-.conveyor-section {
-  background: var(--bg-inset);
-  border: 1px solid #2E2823;
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.8);
-}
-
-.conveyor-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-}
-
-.conveyor-viewport {
+.belt-hall {
+  --machine-width: 58px;
+  --wall-width: 112px;
+  --pkg-size: 46px;
+  --track-height: 14px;
+  --track-bottom: 8px;
+  --hole-bottom: 4px;
+  --hole-height: 70px;
   position: relative;
-  height: 92px;
-  background: linear-gradient(180deg, #161311 0%, #0D0B0A 100%);
-  border: 1px solid #2B2520;
-  border-radius: var(--radius-sm);
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  background:
+    repeating-linear-gradient(90deg, transparent 0, transparent 118px, rgba(255, 255, 255, 0.018) 118px, rgba(255, 255, 255, 0.018) 120px),
+    linear-gradient(180deg, #1B1815 0%, #12100E 100%);
+  border-left: 1px solid #2D2722;
 }
 
-/* Conveyor belt rollers & moving treads */
-.conveyor-track {
+/* Brick shipping wall spans the full height behind the belt holes */
+.belt-hall::after {
+  content: "";
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--wall-width);
+  z-index: 1;
+  border-left: 3px solid #3A1E16;
+  background-color: #6B3426;
+  background-image:
+    linear-gradient(#3A1E16 2px, transparent 2px),
+    linear-gradient(90deg, #3A1E16 2px, transparent 2px),
+    linear-gradient(90deg, #3A1E16 2px, transparent 2px);
+  background-size: 100% 16px, 44px 32px, 44px 32px;
+  background-position: 0 0, 0 0, 22px 16px;
+  box-shadow: inset 8px 0 14px rgba(0, 0, 0, 0.45);
+}
+
+.packer-machine {
+  position: absolute;
+  top: 0;
   bottom: 0;
   left: 0;
-  right: 0;
-  height: 22px;
+  width: var(--machine-width);
+  z-index: 6;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 14px;
   background:
-    repeating-linear-gradient(
-      90deg,
-      #26211D 0px,
-      #26211D 14px,
-      #171412 14px,
-      #171412 22px
-    );
-  border-top: 2px solid #443B34;
-  transition: background-position 0.15s linear;
+    linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, transparent 28%, transparent 70%, rgba(0, 0, 0, 0.5) 100%),
+    #4A4037;
+  border-right: 3px solid var(--brass-gold);
+  box-shadow: 6px 0 12px rgba(0, 0, 0, 0.5);
 }
 
-.conveyor-track.belt-moving {
-  animation: beltSlide 0.45s linear infinite;
+.packer-machine.is-stamping {
+  animation: machineStamp 0.14s ease-out;
+}
+
+@keyframes machineStamp {
+  0% {
+    filter: brightness(1.35);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.packer-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250, 245, 238, 0.55);
+}
+
+.belt-lines {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.belt-row {
+  position: relative;
+  flex: 0 1 124px;
+  min-height: 94px;
+  overflow: hidden;
+}
+
+.belt-row.is-new {
+  animation: beltRowIn 0.35s ease-out;
+}
+
+@keyframes beltRowIn {
+  from {
+    flex-basis: 0;
+    min-height: 0;
+  }
+}
+
+.belt-plate {
+  position: absolute;
+  top: 6px;
+  left: calc(var(--machine-width) + 12px);
+  right: calc(var(--wall-width) + 8px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.belt-plate-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--meat-accent);
+}
+
+.belt-plate-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.belt-plate-price {
+  font-weight: 700;
+  color: var(--brass-gold-hi);
+}
+
+.belt-hole-back,
+.belt-hole-front {
+  position: absolute;
+  right: 0;
+  bottom: var(--hole-bottom);
+  width: var(--wall-width);
+  height: var(--hole-height);
+}
+
+.belt-hole-back {
+  z-index: 2;
+  background: #070605;
+  box-shadow: inset 0 6px 10px rgba(0, 0, 0, 0.9);
+}
+
+/* Darkness swallows packages, with a hazard frame and strip curtain at the opening */
+.belt-hole-front {
+  z-index: 5;
+  pointer-events: none;
+  border-left: 5px solid var(--brass-gold);
+  border-top: 3px solid #1C1917;
+  background:
+    linear-gradient(90deg, transparent 20%, #070605 88%),
+    repeating-linear-gradient(90deg, rgba(250, 245, 238, 0.13) 0, rgba(250, 245, 238, 0.13) 3px, transparent 3px, transparent 7px) 0 0 / 28px 100% no-repeat;
+}
+
+.shipping-sign {
+  position: absolute;
+  right: 6px;
+  bottom: calc(var(--hole-bottom) + var(--hole-height) + 3px);
+  width: calc(var(--wall-width) - 15px);
+  z-index: 5;
+  background: var(--emerald-ready-lo);
+  border: 1px solid var(--emerald-ready);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #ECFDF5;
+}
+
+/* Belt tread, sized so 44px of tread passes in step with package speed */
+.belt-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--track-bottom);
+  height: var(--track-height);
+  z-index: 3;
+  background: repeating-linear-gradient(90deg, #2B2520 0, #2B2520 30px, #171412 30px, #171412 44px);
+  border-top: 2px solid #5A4E44;
+  border-bottom: 2px solid #0F0D0C;
+}
+
+.belt-lines.belt-moving .belt-track {
+  animation: beltSlide 0.1375s linear infinite;
 }
 
 @keyframes beltSlide {
@@ -585,64 +850,45 @@ body::before {
   }
 }
 
-.conveyor-chute-left,
-.conveyor-chute-right {
+.belt-stage {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 26px;
-  z-index: 5;
+  inset: 0;
+  z-index: 4;
   pointer-events: none;
 }
 
-.conveyor-chute-left {
-  left: 0;
-  background: linear-gradient(90deg, rgba(15, 13, 12, 0.95), transparent);
-  border-right: 1px dashed rgba(245, 158, 11, 0.25);
-}
-
-.conveyor-chute-right {
-  right: 0;
-  background: linear-gradient(-90deg, rgba(16, 185, 129, 0.22), transparent);
-  border-left: 2px solid rgba(16, 185, 129, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chute-tag {
-  writing-mode: vertical-rl;
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--emerald-ready-hi);
-  text-transform: uppercase;
-}
-
-.conveyor-packages-stage {
+/* The runner is as wide as the belt, so translateX(100%) carries a package the full length */
+.pkg-runner {
   position: absolute;
-  inset: 0 26px 22px 16px;
-  pointer-events: none;
+  inset: 0;
+  animation: pkgRun linear forwards;
+  will-change: transform;
+}
+
+@keyframes pkgRun {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .conveyor-pkg {
   position: absolute;
-  bottom: 2px;
-  width: 54px;
-  height: 54px;
-  border-radius: 8px;
+  left: 8px;
+  bottom: calc(var(--track-bottom) + var(--track-height));
+  width: var(--pkg-size);
+  height: var(--pkg-size);
+  border-radius: 6px;
   background: #231F1C;
-  border: 2px solid var(--pkg-color, #F59E0B);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 2px solid var(--meat-accent, #F59E0B);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
-  animation: packageConveyorRun 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .conveyor-pkg img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -655,122 +901,134 @@ body::before {
   right: 0;
   background: rgba(15, 13, 12, 0.86);
   font-family: var(--font-mono);
-  font-size: 0.56rem;
+  font-size: 0.5rem;
   font-weight: 700;
   color: var(--brass-gold-hi);
   text-align: center;
-  padding: 1px 2px;
-}
-
-@keyframes packageConveyorRun {
-  0% {
-    left: 2%;
-    transform: translateY(-24px) scale(0.75) rotate(-6deg);
-    opacity: 0;
-  }
-  18% {
-    left: 10%;
-    transform: translateY(0) scale(1.05) rotate(0deg);
-    opacity: 1;
-  }
-  30% {
-    transform: translateY(0) scale(1);
-  }
-  85% {
-    left: 82%;
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    left: 96%;
-    transform: translateY(-6px) scale(0.65);
-    opacity: 0;
-  }
-}
-
-/* Active Batch Manifest Breakdown */
-.batch-manifest {
-  background: #181512;
-  border: 1px solid #2C2621;
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.manifest-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-}
-
-.manifest-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.manifest-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 9px;
-  border-radius: 5px;
-  background: #241F1B;
-  border: 1px solid #38302A;
-  font-family: var(--font-mono);
-  font-size: 0.73rem;
-  color: var(--text-primary);
-}
-
-.manifest-chip-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.manifest-chip-price {
-  color: var(--brass-gold-hi);
-  font-weight: 700;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
-   RIGHT COLUMN: PRODUCTION LINES & QUALITY UPGRADES
+   MINIMIZABLE SIDEBAR: PRODUCTION LINES & QUALITY UPGRADES
    ========================================================================== */
 
 .production-deck {
+  scrollbar-width: thin;
+  scrollbar-color: #52473E transparent;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  min-height: 0;
+  overflow-y: auto;
   background: linear-gradient(180deg, #211D1A 0%, #171412 100%);
   border: 1px solid var(--border-chassis);
   border-top-color: rgba(255, 248, 235, 0.1);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   box-shadow:
     0 16px 32px -12px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: flex-basis 0.22s ease, width 0.22s ease;
+}
+
+.factory-workspace.sidebar-minimized .production-deck {
+  flex-basis: var(--rail-width);
+  width: var(--rail-width);
+  padding: 10px;
+}
+
+.factory-workspace.sidebar-minimized .deck-header,
+.factory-workspace.sidebar-minimized .meat-lines-grid {
+  display: none;
+}
+
+.meat-rail {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.factory-workspace.sidebar-minimized .meat-rail {
+  display: flex;
+}
+
+.meat-rail-btn {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 66px;
+  height: 66px;
+  padding: 0;
+  border: 1px solid #3B332C;
+  border-radius: var(--radius-sm);
+  background: #141210;
+  cursor: pointer;
+  transition: transform 0.14s ease;
+}
+
+.meat-rail-btn:hover {
+  transform: scale(1.05);
+}
+
+.meat-rail-btn:focus-visible {
+  outline: 2px solid var(--brass-gold-hi);
+  outline-offset: 2px;
+}
+
+.meat-rail-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.meat-rail-btn.is-locked img {
+  filter: grayscale(0.85) brightness(0.55) contrast(1.1);
+}
+
+.meat-rail-btn.can-afford {
+  border: 4px solid var(--emerald-ready-hi);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.5);
+}
+
+.meat-rail-level {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border: 2px solid #171412;
+  border-radius: 999px;
+  background: var(--brass-gold-hi);
+  color: #1C1306;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+}
+
+.meat-rail-btn.is-locked .meat-rail-level {
+  display: none;
 }
 
 .deck-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 8px;
   border-bottom: 1px solid #2D2722;
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
 
 .deck-title-group h2 {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -778,36 +1036,22 @@ body::before {
 }
 
 .deck-subtitle {
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   color: var(--text-secondary);
 }
 
 .deck-summary-pills {
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.summary-pill {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  background: var(--bg-inset);
-  border: 1px solid #2E2823;
-  padding: 5px 11px;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-}
-
-.summary-pill strong {
-  color: var(--text-primary);
-}
-
-/* 6 Meat Production Cards Grid */
+/* 6 Meat Production Cards Stack */
 .meat-lines-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
 }
 
 .meat-card {
@@ -816,11 +1060,11 @@ body::before {
   border: 1px solid var(--border-chassis);
   border-top: 3px solid var(--meat-accent, var(--brass-gold));
   border-radius: var(--radius-md);
-  padding: 14px 16px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   box-shadow:
     0 8px 18px -6px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -1060,6 +1304,61 @@ body::before {
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.32);
 }
 
+/* Quality upgrade and container tier buttons, side by side */
+.meat-action-row {
+  display: flex;
+  gap: 6px;
+}
+
+.meat-action-row > .meat-action-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* With the container button beside it, the quality button stacks its cost under the label */
+.meat-action-row:has(.container-btn:not([hidden])) > .meat-action-btn:first-child {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.meat-action-btn.container-btn {
+  flex: 0 0 104px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.meat-action-btn.container-btn[hidden] {
+  display: none;
+}
+
+.container-btn .btn-action-title {
+  font-size: 0.72rem;
+  line-height: 1.15;
+}
+
+.container-btn .btn-action-sub {
+  font-size: 0.6rem;
+}
+
+.container-btn .btn-action-cost {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.meat-action-btn.container-btn.is-maxed {
+  opacity: 1;
+  cursor: default;
+  border-color: rgba(245, 158, 11, 0.45);
+  color: var(--brass-gold-hi);
+}
+
 .btn-action-left {
   display: flex;
   flex-direction: column;
@@ -1089,6 +1388,66 @@ body::before {
   padding: 3px 8px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.22);
+}
+
+/* ==========================================================================
+   PACKING BOT (AUTOCLICKER)
+   ========================================================================== */
+.bot-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: #94A3B8;
+}
+
+.meat-thumb-frame.bot-thumb {
+  padding: 8px;
+}
+
+.meat-rail-btn.bot-rail-btn {
+  padding: 8px;
+}
+
+.metric-val.eaten-val {
+  color: #F87171;
+}
+
+.bot-strip {
+  width: min(100%, 220px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.bot-strip-label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94A3B8;
+  text-align: center;
+}
+
+.bot-strip-track {
+  height: 4px;
+  background: #14110F;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bot-strip-fill {
+  height: 100%;
+  width: 0%;
+  background: #94A3B8;
+}
+
+.floating-payout.is-eaten {
+  margin-top: 24px; /* Sits below the payout popup spawned with it */
+  color: #F87171;
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.9),
+    0 0 12px rgba(248, 113, 113, 0.45);
 }
 
 /* ==========================================================================
@@ -1192,17 +1551,115 @@ body::before {
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
-@media (max-width: 1120px) {
+@media (max-width: 1520px) {
+  .brand-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .telemetry-module,
+  .telemetry-module.treasury-module {
+    min-width: 120px;
+  }
+
+  .telemetry-value,
+  .telemetry-module.treasury-module .telemetry-value {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .factory-shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .telemetry-bar {
+    flex-wrap: wrap;
+  }
+
   .factory-workspace {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    overflow: visible;
   }
 
-  .packaging-station {
-    order: 1;
+  .factory-floor {
+    flex-direction: column;
   }
 
+  .operator-station {
+    flex: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+
+  .station-header {
+    grid-column: 1 / -1;
+  }
+
+  .worker-scene {
+    height: 220px;
+  }
+
+  .belt-hall {
+    --wall-width: 72px;
+    --machine-width: 34px;
+    flex: none;
+    border-left: 0;
+    border-top: 1px solid #2D2722;
+  }
+
+  .belt-lines {
+    position: relative;
+    min-height: 94px;
+  }
+
+  .belt-row {
+    flex: 0 0 94px;
+  }
+
+  .packer-label {
+    display: none;
+  }
+
+  .shipping-sign {
+    font-size: 0.48rem;
+    letter-spacing: 0;
+  }
+
+  /* Expanded, the sidebar covers the game instead of sharing its width */
   .production-deck {
-    order: 2;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    width: min(var(--sidebar-width), 100vw);
+    border-radius: 0;
+    transition: none;
+  }
+
+  /* Minimized, it becomes a strip of icons above the factory floor */
+  .factory-workspace.sidebar-minimized .production-deck {
+    position: static;
+    order: -1;
+    flex-basis: auto;
+    width: auto;
+    overflow: visible;
+    border-radius: var(--radius-lg);
+  }
+
+  .meat-rail {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .meat-rail-btn {
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -1219,14 +1676,5 @@ body::before {
 
   .telemetry-module.treasury-module {
     grid-column: 1 / -1;
-  }
-
-  .meat-lines-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .package-press-btn {
-    width: 190px;
-    height: 190px;
   }
 }
